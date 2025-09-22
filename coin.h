@@ -9,7 +9,8 @@ public:
 	coin();
 	coin(Vector2f _position);
 
-	void collision(player& p);
+	void checkCollision(player& p);
+	void update(Time dt);
 
 };
 
