@@ -12,11 +12,15 @@ player::player() {
 	acc = Vector2f(0, 0);
 	mass = 1.0f;
 	score = 0;
+	lives = 3;
+	speed = 500;
+	lasthit = Time::Zero;
 }
 
-player::player(Vector2f _position, float _size) {
+player::player(Vector2f _position, float _size,int _speed = 500) {
 	size = _size;
 	position = _position;
+	speed = _speed;
 	shape.setRadius(size);
 	shape.setFillColor(Color::White);
 	shape.setOrigin(shape.getGeometricCenter());
@@ -24,6 +28,8 @@ player::player(Vector2f _position, float _size) {
 	acc = Vector2f(0, 0);
 	mass = 1.0f;
 	score = 0;
+	lives = 3; 
+	lasthit = Time::Zero;
 }
 
 void player::setSize(int _size)
@@ -51,11 +57,11 @@ void player::update(Time dt)
 {
 
 	if (moveR) {
-		position.x += 500 * dt.asSeconds();
+		position.x += speed * dt.asSeconds();
 		moveR = false;	
 	}
 	if (moveL) {
-		position.x -= 500 * dt.asSeconds();
+		position.x -= speed * dt.asSeconds();
 		moveL = false;
 	}
 	if (moveU && onGround) {
@@ -64,6 +70,16 @@ void player::update(Time dt)
 		vel.y = -800;
 	}
 	shape.setPosition(position);
+
+	if (lives <= 0) {
+		position = { 0, 0 };
+		vel = { 0,0 };
+		lives = 3;
+	}
+
+	if (position.y > 2000) {
+		lives = 0;
+	}
 }	
 
 void player::physicsUpdate(Time dt)
@@ -73,4 +89,18 @@ void player::physicsUpdate(Time dt)
 	vel = vel + acc * dt.asSeconds();	
 	position = position + vel * dt.asSeconds();	
 
-}	
+}
+void player::takeDamage(Time tt)
+{
+
+	float temp = tt.asMilliseconds() - lasthit.asMilliseconds();
+	// Define invincibility frame duration
+	Time iFrames = milliseconds(500);
+
+	// If the player was hit within the invincibility frame duration, do not reduce lives
+	if (temp > iFrames.asMilliseconds()) {
+		lives -= 1;
+		lasthit = tt;
+	}
+}
+
