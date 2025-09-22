@@ -11,6 +11,7 @@ public:
 	ground(Vector2f _position, Vector2f _size);
 
 	void checkCollision(player& p);	
+	void checkEnemyCollision(enemy& e);
 	void update(Time dt);
 };
 
