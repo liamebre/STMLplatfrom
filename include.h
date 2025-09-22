@@ -5,8 +5,10 @@
 #include <string>
 #include <sstream>
 #include "player.h"	
-#include "ground.h"	
 #include "coin.h"
+#include "enemy.h"
+#include "ground.h"	
+
 
 using namespace sf;
 using namespace std;
