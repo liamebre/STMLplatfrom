@@ -21,15 +21,19 @@ public:
 	bool moveU = false;
 	bool onGround = false;	
 	int score;
+	int lives;
+	int speed;
+	Time lasthit = Time::Zero;
 
 	player();
-	player(Vector2f _position, float _size);
+	player(Vector2f _position, float _size,int _speed);
 	void setSize(int size_);
 	void moveRight();
 	void moveLeft();
 	void moveUp();
 	void update(Time dt);
 	void physicsUpdate(Time dt);
+	void takeDamage(Time dt);
 
 };
 
