@@ -15,12 +15,14 @@ coin::coin(Vector2f position_) {
 	shape.setPosition(position);
 }
 
-void coin::collision(player& p)
+void coin::checkCollision(player& p)
 {
 	Vector2f distance = { p.position - position };
 	if (abs(distance.x) <= p.size + size && abs(distance.y) <= p.size +size) {
 		p.score += 1; 
 		position = { 0,-100 };
-		shape.setPosition(position);	
 	}
+}
+void coin::update(Time dt_) {
+	shape.setPosition(position);
 }
