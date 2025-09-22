@@ -1,4 +1,7 @@
 #include "ground.h"
+#include "enemy.h"
+#include <iostream>
+using namespace std;
 
 ground::ground() {
 	position = Vector2f(0, 0);
@@ -48,8 +51,36 @@ void ground::checkCollision(player& p)
 			}
 		}
 	}
-	
 }
+
+void ground::checkEnemyCollision(enemy& e)
+{
+	if (e.position.y + e.size.y / 2.0f >= position.y - size.y / 2.0f &&
+		e.position.y - e.size.y / 2.0f <= position.y + size.y / 2.0f &&
+		e.position.x + e.size.x / 2.0f >= position.x - size.x / 2.0f &&
+		e.position.x - e.size.x / 2.0f <= position.x + size.x / 2.0f) {
+		// Collision detected, resolve it
+		float overlapLeft = (e.position.x + e.size.x / 2.0f) - (position.x - size.x / 2.0f);
+		float overlapRight = (position.x + size.x / 2.0f) - (e.position.x - e.size.x / 2.0f);
+		float overlapTop = (e.position.y + e.size.y / 2.0f) - (position.y - size.y / 2.0f);
+		float overlapBottom = (position.y + size.y / 2.0f) - (e.position.y - e.size.y / 2.0f);
+		bool fromLeft = abs(overlapLeft) < abs(overlapRight);
+		bool fromTop = abs(overlapTop) < abs(overlapBottom);
+		float minOverlapX = fromLeft ? overlapLeft : overlapRight;
+		float minOverlapY = fromTop ? overlapTop : overlapBottom;
+		if (abs(minOverlapX) < abs(minOverlapY)) {
+			// Resolve collision on the X axis
+			e.position.x += fromLeft ? -minOverlapX : minOverlapX;
+			e.vel.x = 0; // Stop horizontal movement
+		}
+		else {
+			// Resolve collision on the Y axis
+			e.position.y += fromTop ? -minOverlapY : minOverlapY;
+			e.vel.y = 0; // Stop vertical movement
+		}
+	}
+}
+
 
 void ground::update(Time dt) {
 	shape.setPosition(position);
