@@ -53,7 +53,7 @@ void player::moveUp()
 }
 
 
-void player::update(Time dt)
+void player::update(Time dt, float offset)
 {
 
 	if (moveR) {
@@ -72,7 +72,7 @@ void player::update(Time dt)
 	shape.setPosition(position);
 
 	if (lives <= 0) {
-		position = { 0, 0 };
+		position = { offset + 960 , 0 };
 		vel = { 0,0 };
 		lives = 3;
 	}
