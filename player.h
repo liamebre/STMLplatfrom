@@ -31,7 +31,7 @@ public:
 	void moveRight();
 	void moveLeft();
 	void moveUp();
-	void update(Time dt);
+	void update(Time dt,float offset);
 	void physicsUpdate(Time dt);
 	void takeDamage(Time dt);
 
